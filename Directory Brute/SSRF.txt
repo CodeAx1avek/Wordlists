@@ -1,0 +1,44 @@
+
+Content-Type: application/json
+
+{
+  "application_type": "web",
+  "redirect_uris": [
+    "http://abc123.oastify.com/callback"
+  ],
+  "client_name": "vision-bio api axisbank.com",
+  "logo_uri": "http://abc123.oastify.com/logo.png",
+  "token_endpoint_auth_method": "client_secret_basic",
+  "request_uris": [
+    "http://abc123.oastify.com/favicon.ico"
+  ],
+  "jwks_uri": "http://abc123.oastify.com/jwks.json",
+  "metadata_uri": "http://abc123.oastify.com/metadata",
+  "subject_type": "pairwise"
+}
+
+
+
+
+
+Content-Type: application/xml
+Content-Type: text/xml
+
+
+<?xml version="1.0" encoding="UTF-8"?>
+<client_metadata>
+  <application_type>web</application_type>
+  <redirect_uris>
+    <uri>http://abc123.oastify.com/callback</uri>
+  </redirect_uris>
+  <client_name>vision-bio api axisbank.com</client_name>
+  <logo_uri>http://abc123.oastify.com/logo.png</logo_uri>
+  <token_endpoint_auth_method>client_secret_basic</token_endpoint_auth_method>
+  <request_uris>
+    <uri>http://abc123.oastify.com/favicon.ico</uri>
+  </request_uris>
+  <jwks_uri>http://abc123.oastify.com/jwks.json</jwks_uri>
+  <metadata_uri>http://abc123.oastify.com/metadata</metadata_uri>
+  <subject_type>pairwise</subject_type>
+</client_metadata>
+

@@ -1,0 +1,63 @@
+Apache HTTPD
+/server-status
+/index.html
+/manual/
+## Nginx
+/
+/50x.html
+/404.html
+## Microsoft IIS
+/iisstart.htm
+/welcome.png
+/images/iis.png
+/aspnet_client/
+## Tomcat
+/
+/manager/html
+/docs/
+/examples/
+## JBoss
+/admin-console/
+/console/
+/web-console/
+## WebLogic
+/console/
+/console/login/LoginForm.jsp
+/bea_wls_internal/
+## WebSphere
+/ibm/console/
+/admin/
+## LiteSpeed
+/
+## OpenResty
+/
+## Node.js (Express)
+/
+## Jetty
+/
+## Python Flask
+/
+## Django
+/admin/
+## Amazon AWS
+/
+/favicon.ico
+/robots.txt
+/.aws/
+/aws/credentials
+/server-status
+/ec2metadata/
+http://169.254.169.254/latest/meta-data/
+## Cloudflare
+/cdn-cgi/trace
+/cdn-cgi/l/email-protection
+/cdn-cgi/scripts/5c5dd728/cloudflare-static/rocket-loader.min.js
+/
+## Microsoft Azure
+/hostingstart.html
+/api/
+/admin/
+/web.config
+/AzureAD/
+/aad/
+/login.microsoftonline.com 

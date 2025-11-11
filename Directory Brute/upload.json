@@ -1,0 +1,256 @@
+{
+  "Name": "hackers",
+  "Description": "string",
+  "FullName": "hacker",
+  "Authentication": {
+    "ControlM": {
+      "Password": "Mumbai@321",
+      "PasswordExpirationDays": 30,
+      "ChangePasswordAtNextLogin": true,
+      "LockAccount": true,
+      "AccountLockedOnDate": "string"
+    },
+    "ExternalProvider": {
+      "LdapUserAndDomain": "string"
+    }
+  },
+  "Roles": [
+    "string"
+  ],
+  "Authorization": {
+    "Name": "string",
+    "Description": "string",
+    "OrganizationGroups": [
+      "string"
+    ],
+    "OrganizationUsers": [
+      "string"
+    ],
+    "AllowedJobs": {
+      "Included": [
+        [
+          [
+            "string"
+          ]
+        ]
+      ],
+      "Excluded": [
+        [
+          [
+            "string"
+          ]
+        ]
+      ]
+    },
+    "AllowedJobActions": {
+      "ViewProperties": true,
+      "Documentation": true,
+      "Log": true,
+      "Statistics": true,
+      "ViewOutputList": true,
+      "ViewJcl": true,
+      "Why": true,
+      "Hold": true,
+      "Free": true,
+      "Confirm": true,
+      "Rerun": true,
+      "React": true,
+      "Restart": true,
+      "Kill": true,
+      "Bypass": true,
+      "Delete": true,
+      "Undelete": true,
+      "SetToOk": true,
+      "EditProperties": true,
+      "EditJcl": true
+    },
+    "Privileges": {
+      "ClientAccess": {
+        "ControlmWebClientAccess": "string",
+        "SelfServiceAccess": "string",
+        "WorkloadChangeManagerAccess": "string",
+        "UtilitiesAccess": "string",
+        "ApplicationIntegratorAccess": "string",
+        "AutomationAPIAccess": "string",
+        "WorkflowInsightsAccess": "string"
+      },
+      "ConfigurationManager": {
+        "Authorization": "string",
+        "ConfigurationManagerAccess": "string",
+        "Configuration": "string",
+        "Operation": "string",
+        "Database": "string",
+        "ControlmSecurity": "string"
+      },
+      "Monitoring": {
+        "Alert": "string",
+        "ViewpointArchive": "string"
+      },
+      "Planning": {
+        "PeriodicalStatistics": "string",
+        "ForecastOrBatchImpactManagerConfig": "string",
+        "PromotionRules": "string",
+        "PromoteAction": "string"
+      },
+      "Tools": {
+        "Cli": "string",
+        "BatchImpactManagerReport": "string",
+        "SlaManagementReports": "string",
+        "ForecastReport": "string",
+        "HistoryReports": "string",
+        "ControlMReport": "string",
+        "SiteStandardPolicies": "string"
+      },
+      "ViewpointManager": {
+        "Collections": "string",
+        "Hierarchies": "string",
+        "Filters": "string",
+        "Viewpoints": "string"
+      }
+    },
+    "Folders": [
+      {
+        "Privilege": "string",
+        "ControlmServer": "string",
+        "Library": "string",
+        "Folder": "string",
+        "Order": true,
+        "Run": true,
+        "Jobs": {
+          "Privilege": "string",
+          "Application": "string",
+          "SubApplication": "string"
+        }
+      }
+    ],
+    "Calendars": [
+      {
+        "Privilege": "string",
+        "ControlmServer": "string",
+        "Name": "string"
+      }
+    ],
+    "RunasUsers": [
+      {
+        "ControlmServer": "string",
+        "RunasUser": "string",
+        "Host": "string"
+      }
+    ],
+    "WorkloadPolicies": [
+      {
+        "Privilege": "string",
+        "Name": "string"
+      }
+    ],
+    "SiteStandard": [
+      {
+        "Privilege": "string",
+        "Name": "string"
+      }
+    ],
+    "Secrets": [
+      {
+        "Privilege": "string",
+        "Name": "string"
+      }
+    ],
+    "SiteCustomization": [
+      {
+        "Privilege": "string",
+        "Name": "string"
+      }
+    ],
+    "Services": [
+      {
+        "Privilege": "string",
+        "Name": "string",
+        "AllowedActions": {
+          "DrillDown": true,
+          "Run": true,
+          "Hold": true,
+          "Resume": true,
+          "ViewOrderableService": true
+        }
+      }
+    ],
+    "Events": [
+      {
+        "Privilege": "string",
+        "ControlmServer": "string",
+        "Name": "string"
+      }
+    ],
+    "Mutexes": [
+      {
+        "Privilege": "string",
+        "ControlmServer": "string",
+        "Name": "string"
+      }
+    ],
+    "Locks": [
+      {
+        "Privilege": "string",
+        "ControlmServer": "string",
+        "Name": "string"
+      }
+    ],
+    "Semaphores": [
+      {
+        "Privilege": "string",
+        "ControlmServer": "string",
+        "Name": "string"
+      }
+    ],
+    "Pools": [
+      {
+        "Privilege": "string",
+        "ControlmServer": "string",
+        "Name": "string"
+      }
+    ],
+    "Variables": [
+      {
+        "Privilege": "string",
+        "ControlmServer": "string",
+        "Name": "string"
+      }
+    ],
+    "GlobalEvents": [
+      {
+        "Privilege": "string",
+        "Name": "string"
+      }
+    ],
+    "AgentManagement": [
+      {
+        "ControlmServer": "string",
+        "Agent": "string",
+        "Privilege": "string"
+      }
+    ],
+    "PluginManagement": [
+      {
+        "ControlmServer": "string",
+        "Agent": "string",
+        "PluginType": "string",
+        "Privilege": "string"
+      }
+    ],
+    "ConnectionProfileManagement": [
+      {
+        "ControlmServer": "string",
+        "Agent": "string",
+        "PluginType": "string",
+        "Name": "string",
+        "Privilege": "string"
+      }
+    ],
+    "RunasDefinitionManagement": [
+      {
+        "ControlmServer": "string",
+        "Privilege": "string"
+      }
+    ]
+  }
+}

