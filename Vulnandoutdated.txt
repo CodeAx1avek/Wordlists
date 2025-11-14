@@ -1,0 +1,62 @@
+(function () {
+    const allVersions = {
+        'jQuery': window.jQuery?.fn?.jquery,
+        'Bootstrap (jQuery)': window.jQuery?.fn?.tooltip?.Constructor?.VERSION,
+        'Bootstrap (Native)': window.bootstrap?.Tooltip?.VERSION,
+        'React': window.React?.version || ('__REACT_DEVTOOLS_GLOBAL_HOOK__' in window ? 'Detected (DevTools Hook)' : undefined),
+        'Vue.js': window.Vue?.version || ('__VUE_DEVTOOLS_GLOBAL_HOOK__' in window ? 'Detected (DevTools Hook)' : undefined),
+        'AngularJS': window.angular?.version?.full,
+        'Angular (New)': window.ng?.coreTokens ? 'Detected' : undefined,
+        'Lodash': window._?.VERSION,
+        'Underscore.js': window._?.underscore ? window._.VERSION : undefined,
+        'Moment.js': window.moment?.version,
+        'Day.js': window.dayjs?.version,
+        'Axios': window.axios?.VERSION,
+        'Fetch API': 'fetch' in window ? 'Detected' : undefined,
+        'Chart.js': window.Chart?.version,
+        'D3.js': window.d3?.version,
+        'RxJS': window.rxjs?.version,
+        'Redux': window.Redux?.version,
+        'Recoil': window.Recoil ? 'Detected' : undefined,
+        'Zustand': window.zustand ? 'Detected' : undefined,
+        'Ember.js': window.Ember?.VERSION,
+        'Backbone.js': window.Backbone?.VERSION,
+        'Next.js': window.__NEXT_DATA__?.buildId ? `Detected (Build ID: ${window.__NEXT_DATA__.buildId})` : undefined,
+        'Nuxt.js': window.__NUXT__ ? 'Detected' : undefined,
+        'GSAP': window.gsap?.version,
+        'Anime.js': window.anime?.version,
+        'Swiper.js': window.Swiper?.version,
+        'SweetAlert2': window.Swal?.version,
+        'Toastr': window.toastr?.version,
+        'Video.js': window.videojs?.VERSION,
+        'PDF.js': window.pdfjsLib?.version,
+        'Dropzone.js': window.Dropzone?.version,
+        'FilePond': window.FilePond?.version,
+        'Three.js': window.THREE?.REVISION,
+        'FullCalendar': window.FullCalendar?.version || window.Calendar?.version,
+        'Flatpickr': window.flatpickr?.version,
+        'Select2': window.jQuery?.fn?.select2?.amd ? 'Detected' : undefined,
+        'DataTables': window.jQuery?.fn?.DataTable?.version,
+        'Leaflet.js': window.L?.version,
+        'Mapbox GL JS': window.mapboxgl?.version,
+        'Quill': window.Quill?.version,
+        'TinyMCE': window.tinymce?.majorVersion ? `${window.tinymce.majorVersion}.${window.tinymce.minorVersion}` : undefined,
+        'Ace Editor': window.ace?.version,
+        'Monaco Editor': window.monaco?.editor ? 'Detected' : undefined,
+        'Socket.IO': window.io?.version,
+        'Pusher': window.Pusher?.version,
+        'Firebase': window.firebase?.SDK_VERSION,
+        'Parse': window.Parse?.VERSION,
+        'Babel': window.Babel?.version,
+        'Tailwind CSS': window.tailwind?.config ? 'Detected' : undefined,
+        'Foundation': window.Foundation?.version,
+        'CryptoJS': window.CryptoJS ? (window.CryptoJS.lib?.Base?.version || 'Detected') : undefined
+    };
+
+    const detectedOnly = Object.fromEntries(
+        Object.entries(allVersions).filter(([_, value]) => value !== undefined)
+    );
+
+    console.log('%c? Detected JavaScript Libraries:', 'color: limegreen; font-weight: bold;');
+    console.table(detectedOnly);
+})();
