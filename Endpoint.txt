@@ -1,0 +1,79 @@
+(async () => {
+    const patterns = {
+        ip: /\b(?:\d{1,3}\.){3}\d{1,3}\b/g,
+        email: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g,
+        url: /\bhttps?:\/\/[^\s"'<>\\]+/g,
+        hidden_url: /(?:action|src|href)\s*=\s*["'](\/[^"'>]+)["']/gi,
+        api: /(?:GET|POST|PUT|DELETE|PATCH)?\s*["'`](\/[^"'` \n\r]+)["'`]/gi,
+        name_attr: /name\s*=\s*["']([^"'=]+)["']/gi,
+    };
+
+    const results = {
+        ip: new Set(),
+        email: new Set(),
+        url: new Set(),
+        hidden_url: new Set(),
+        api: new Set(),
+        name: new Set(),
+    };
+
+    function extractAll(text, pattern, key, group = 0) {
+        let match;
+        while ((match = pattern.exec(text)) !== null) {
+            const value = group > 0 && match[group] ? match[group].trim() : match[0].trim();
+            if (value) results[key].add(value);
+        }
+    }
+
+    // Step 1: Extract from DOM content
+    const html = document.documentElement.outerHTML;
+    Object.entries(patterns).forEach(([key, regex]) => {
+        const group = (key === 'hidden_url' || key === 'name_attr') ? 1 : 0;
+        extractAll(html, regex, key === 'name_attr' ? 'name' : key, group);
+    });
+
+    // Step 2: Extract from inline JS
+    const inlineScripts = Array.from(document.scripts).filter(s => !s.src);
+    for (const script of inlineScripts) {
+        const content = script.textContent;
+        Object.entries(patterns).forEach(([key, regex]) => {
+            const group = (key === 'hidden_url' || key === 'name_attr') ? 1 : 0;
+            extractAll(content, regex, key === 'name_attr' ? 'name' : key, group);
+        });
+    }
+
+    // Step 3: Extract from external JS files (if CORS allows)
+    const externalScripts = Array.from(document.scripts).filter(s => s.src);
+    for (const script of externalScripts) {
+        try {
+            const res = await fetch(script.src);
+            const content = await res.text();
+            Object.entries(patterns).forEach(([key, regex]) => {
+                const group = (key === 'hidden_url' || key === 'name_attr') ? 1 : 0;
+                extractAll(content, regex, key === 'name_attr' ? 'name' : key, group);
+            });
+        } catch (err) {
+            console.warn('CORS blocked or failed:', script.src);
+        }
+    }
+
+    // Step 4: Scan all inline event attributes for hidden IPs/URLs/names
+    document.querySelectorAll('*').forEach(el => {
+        for (const attr of el.getAttributeNames()) {
+            const val = el.getAttribute(attr);
+            if (typeof val === 'string') {
+                extractAll(val, patterns.ip, 'ip');
+                extractAll(val, patterns.url, 'url');
+                extractAll(val, patterns.api, 'api');
+                extractAll(val, patterns.name_attr, 'name', 1);
+            }
+        }
+    });
+
+    // Final Output
+    console.log('?? DEEP EXTRACTION RESULTS:');
+    for (const [key, values] of Object.entries(results)) {
+        console.log(`\n?? ${key.toUpperCase()} (${values.size} found):`);
+        console.log([...values].join('\n') || 'None found.');
+    }
+})();
