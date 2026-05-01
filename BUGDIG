@@ -18,14 +18,14 @@ export COOKIE_B="session=yyy"  # From account B
 sudo apt update && sudo apt install -y jq curl grep sed wget unzip
 
 # Install Go tools
-go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder
-go install -v github.com/projectdiscovery/httpx/cmd/httpx
-go install -v github.com/projectdiscovery/katana/cmd/katana
-go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei
-go install -v github.com/tomnomnom/gf
-go install -v github.com/tomnomnom/waybackurls
-go install -v github.com/tomnomnom/unfurl
-go install -v github.com/tomnomnom/qsreplace
+go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
+go install -v github.com/projectdiscovery/httpx/cmd/httpx@latest
+go install -v github.com/projectdiscovery/katana/cmd/katana@latest
+go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei@latest
+go install -v github.com/tomnomnom/gf@latest
+go install -v github.com/tomnomnom/waybackurls@latest
+go install -v github.com/tomnomnom/unfurl@latest
+go install -v github.com/tomnomnom/qsreplace@latest
 
 # Install gf patterns
 git clone https://github.com/1ndianl33t/Gf-Patterns ~/gf-patterns
