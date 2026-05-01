@@ -1,0 +1,36 @@
+# 1. Create two accounts on the target
+#    - Account A: normal_user@temp-mail.org
+#    - Account B: attacker@temp-mail.org
+
+# 2. Map all user actions (not URLs)
+#    - What can user A do? (view profile, add to cart, checkout, view orders)
+#    - What can user B see of user A? (nothing normally)
+
+# 3. Capture ALL requests for each action in Burp Suite
+#    - Focus on requests with IDs, emails, cart numbers, order IDs
+
+IN KALI LINUX - RECON PRO MAX
+export TARGET="example.com"  # Replace with your target
+export COOKIE_A="session=xxx"  # From account A
+export COOKIE_B="session=yyy"  # From account B
+
+# Install required tools
+sudo apt update && sudo apt install -y jq curl grep sed wget unzip
+
+# Install Go tools
+go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder
+go install -v github.com/projectdiscovery/httpx/cmd/httpx
+go install -v github.com/projectdiscovery/katana/cmd/katana
+go install -v github.com/projectdiscovery/nuclei/v3/cmd/nuclei
+go install -v github.com/tomnomnom/gf
+go install -v github.com/tomnomnom/waybackurls
+go install -v github.com/tomnomnom/unfurl
+go install -v github.com/tomnomnom/qsreplace
+
+# Install gf patterns
+git clone https://github.com/1ndianl33t/Gf-Patterns ~/gf-patterns
+cp ~/gf-patterns/*.json ~/.gf/
+
+# Create working directory
+mkdir ~/bug-bounty && cd ~/bug-bounty
+
