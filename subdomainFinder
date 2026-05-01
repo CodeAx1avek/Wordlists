@@ -1,0 +1,279 @@
+#!/bin/bash
+# master-subdomain.sh - Finds ALL subdomains for ANY target
+
+TARGET="example.com"  # CHANGE THIS
+OUTPUT_DIR="recon-$TARGET"
+
+mkdir -p $OUTPUT_DIR
+cd $OUTPUT_DIR
+
+# ============================================
+# PHASE 1: PASSIVE SUBDOMAIN ENUMERATION
+# ============================================
+
+echo "[1/8] Running passive enumeration..."
+
+# Subfinder (Fast, good for wide scope)
+subfinder -d $TARGET -all -recursive -silent -o subfinder.txt
+
+# Assetfinder (Good for root domain)
+assetfinder --subs-only $TARGET > assetfinder.txt
+
+# Amass (Deep but slow - use passive only for speed)
+amass enum -passive -d $TARGET -o amass.txt
+
+# Findomain (Good certificate source)
+findomain -t $TARGET -q -u findomain.txt
+
+# Chaos (ProjectDiscovery's dataset)
+chaos -d $TARGET -silent -o chaos.txt 2>/dev/null
+
+# ============================================
+# PHASE 2: CERTIFICATE TRANSPARENCY
+# ============================================
+
+echo "[2/8] Querying Certificate Transparency logs..."
+
+# crt.sh
+curl -s "https://crt.sh/?q=%.$TARGET&output=json" | jq -r '.[].name_value' | sed 's/\*\.//g' | sort -u > crtsh.txt
+
+# Certspotter
+curl -s "https://certspotter.com/api/v0/certs?domain=$TARGET" | jq -r '.[].dns_names[]' | sed 's/\*\.//g' | sort -u > certspotter.txt
+
+# Facebook CT
+curl -s "https://graph.facebook.com/certificates?query=%.$TARGET&fields=name" | jq -r '.data[].name' | sed 's/\*\.//g' | sort -u > facebook-ct.txt
+
+# ============================================
+# PHASE 3: ALTERNATE WORDLISTS & PERMUTATIONS
+# ============================================
+
+echo "[3/8] Generating permutations..."
+
+# Common subdomain wordlist
+cat > common.txt << 'EOF'
+www
+mail
+ftp
+localhost
+webmail
+smtp
+pop
+ns1
+webdisk
+ns2
+cpanel
+whm
+autodiscover
+autoconfig
+m
+imap
+test
+ns
+blog
+pop3
+dev
+www2
+admin
+forum
+news
+vpn
+ns3
+mail2
+new
+mysql
+old
+lists
+support
+mobile
+mx
+static
+docs
+beta
+shop
+sql
+secure
+demo
+cp
+calendar
+wiki
+web
+media
+email
+images
+img
+download
+dns
+piwik
+stats
+portal
+manage
+start
+search
+site
+events
+video
+ipv4
+vps
+sip
+dns2
+api
+cdn
+stats
+mm
+client
+live
+forum
+server
+ftp2
+mx1
+mx2
+stage
+ns4
+i
+info
+mssql
+help
+apps
+ns5
+go
+a
+mx0
+relay
+mongo
+radius
+www1
+webmail2
+sip2
+dashboard
+go2
+oracle
+app
+ssh
+devel
+pi
+sql2
+postgresql
+mail3
+git
+sandbox
+id
+auth
+cdn2
+secure2
+vpn2
+whois
+dns3
+dns4
+dns5
+EOF
+
+# Generate permutations from known subdomains
+cat subfinder.txt assetfinder.txt amass.txt 2>/dev/null | sort -u > all-passive.txt
+
+# Add common prefixes/suffixes
+cat all-passive.txt | while read sub; do
+    echo "dev-$sub"
+    echo "staging-$sub"
+    echo "test-$sub"
+    echo "old-$sub"
+    echo "new-$sub"
+    echo "$sub-dev"
+    echo "$sub-staging"
+done >> permutations.txt
+
+# ============================================
+# PHASE 4: DNS BRUTE FORCE (Optional but powerful)
+# ============================================
+
+echo "[4/8] Brute forcing subdomains (this takes time)..."
+
+# Using puredns for fast brute force
+if command -v puredns &> /dev/null; then
+    puredns bruteforce common.txt $TARGET -r /usr/share/wordlists/dns/resolvers.txt -o puredns.txt
+else
+    # Alternative using dnsx with wordlist
+    dnsx -l common.txt -o dnsx-brute.txt -r 1.1.1.1,8.8.8.8 -t 1000 -domain $TARGET -silent
+fi
+
+# ============================================
+# PHASE 5: ALTERNATIVE DATA SOURCES
+# ============================================
+
+echo "[5/8] Checking alternative sources..."
+
+# AlienVault OTX
+curl -s "https://otx.alienvault.com/api/v1/indicators/domain/$TARGET/passive_dns" | jq -r '.passive_dns[].hostname' 2>/dev/null | sed 's/\*\.//g' >> otx.txt
+
+# SecurityTrails (free API limit)
+curl -s "https://securitytrails.com/list/apex_domain/$TARGET" | grep -oP '(?<=<td>)[^<]+\.$TARGET' >> securitytrails.txt 2>/dev/null
+
+# ThreatCrowd
+curl -s "https://www.threatcrowd.org/searchApi/v2/domain/report/?domain=$TARGET" | jq -r '.subdomains[]' 2>/dev/null >> threatcrowd.txt
+
+# BufferOver
+curl -s "https://dns.bufferover.run/dns?q=$TARGET" | jq -r '.FDNS_A[]' 2>/dev/null | cut -d',' -f2 >> bufferover.txt
+
+# ============================================
+# PHASE 6: GITHUB CODE SEARCH (Golden Source)
+# ============================================
+
+echo "[6/8] Searching GitHub for subdomains..."
+
+# Using github-subdomains.py (if installed)
+if [ -f ~/tools/github-subdomains.py ]; then
+    python3 ~/tools/github-subdomains.py -d $TARGET -t YOUR_GITHUB_TOKEN -o github.txt
+fi
+
+# Alternative: Download known configs from GitHub
+curl -s "https://raw.githubusercontent.com/gwen001/github-search/master/github-subdomains.py" | python3 - -d $TARGET -t $GITHUB_TOKEN
+
+# ============================================
+# PHASE 7: IP SPACE DISCOVERY (Critical)
+# ============================================
+
+echo "[7/8] Discovering IP addresses and ASNs..."
+
+# Get ASN for target
+whois $TARGET | grep -i "origin:" | awk '{print $2}' > asn.txt
+
+# Get all IPs in that ASN (if ASN found)
+if [ -s asn.txt ]; then
+    while read asn; do
+        whois -h whois.radb.net -- "-i origin $asn" | grep -Eo "([0-9.]+){4}/[0-9]+" >> ips.txt
+    done < asn.txt
+fi
+
+# Convert IP ranges to reverse DNS
+cat ips.txt | while read cidr; do
+    dnsx -ptr -a -resp-only -l <(nmap -sL -n $cidr | awk '/Nmap scan report/{print $NF}') -o reverse-dns.txt
+done
+
+# ============================================
+# PHASE 8: COMBINE & DEDUPLICATE
+# ============================================
+
+echo "[8/8] Combining and deduplicating..."
+
+# Combine all sources
+cat *.txt 2>/dev/null | \
+    grep -v "null\|error\|Not Found" | \
+    sed 's/\*\.//g' | \
+    sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | \
+    sed 's/[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+//g' | \
+    grep -E "([a-zA-Z0-9-]+\.)+$TARGET" | \
+    sort -u | tee all-subdomains.txt
+
+# Filter valid subdomains (have at least 3 parts)
+grep -E "([a-zA-Z0-9-]+\.){2,}$TARGET" all-subdomains.txt > deep-subdomains.txt
+
+echo "=========================================="
+echo "RESULTS SAVED IN $OUTPUT_DIR"
+echo "=========================================="
+echo "Total unique subdomains: $(wc -l all-subdomains.txt)"
+echo "Deep subdomains: $(wc -l deep-subdomains.txt)"
+echo ""
+echo "Files created:"
+echo "  - all-subdomains.txt (ALL found)"
+echo "  - deep-subdomains.txt (3+ levels deep)"
+echo "  - subfinder.txt (subfinder only)"
+echo "  - permutations.txt (generated variants)"
