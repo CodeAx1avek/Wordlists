@@ -4,4 +4,4 @@ cat subdomains.txt | httpx -silent -status-code -title -tech-detect -content-len
 
 cat alive.txt | awk '{print $1}' | sort -u > clean-urls.txt
 
-gau --subs --providers wayback,alienvault,commoncrawl,otx,urlscan --threads 50 --timeout 5 --retry 2 < clean-urls.txt | katana -silent -f smart -kf -jc -fx -ef woff,css,png,svg,jpg,woff2,jpeg,gif,svg -o allurls.txt
+gau --subs --providers wayback,alienvault,commoncrawl,otx,urlscan --threads 50 --timeout 5 --retries 2 < clean-urls.txt 2>/dev/null | katana -kf -jc -fx -ef woff,css,png,svg,jpg,woff2,jpeg,gif,svg -o allurls.txt
