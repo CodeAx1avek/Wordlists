@@ -34,3 +34,58 @@ cp ~/gf-patterns/*.json ~/.gf/
 # Create working directory
 mkdir ~/bug-bounty && cd ~/bug-bounty
 
+
+site:adityabirlacapital.com (pdf|doc|docx|xls|xlsx|csv|ppt|pptx)
+
+site:adityabirlacapital.com (filetype:pdf OR filetype:doc OR filetype:docx OR filetype:xls OR filetype:xlsx OR filetype:csv OR filetype:ppt OR filetype:pptx) confidential
+
+"ABEVN" OR "ABEV" OR "Aditya Birla Capital" (filetype:xls OR filetype:xlsx OR filetype:pdf OR filetype:txt OR filetype:csv) "employee id" OR "emp id" OR "employee code"
+
+
+("Aditya Birla Capital" OR "ABCL" OR "@adityabirlacapital.com")
+(site:github.com OR site:gitlab.com OR site:bitbucket.org OR site:scribd.com OR site:coursehero.com OR site:slideshare.net OR site:archive.org OR site:drive.google.com OR site:reddit.com OR site:stackoverflow.com OR site:medium.com)
+(filetype:pdf OR filetype:doc OR filetype:docx OR filetype:xls OR filetype:xlsx OR filetype:csv OR filetype:ppt OR filetype:pptx OR filetype:txt)
+("employee" OR "staff" OR "team" OR "directory" OR "contact" OR "internal" OR "confidential" OR "project")
+
+"Aditya Birla" ("employee" OR "staff" OR "team") ("id" OR "username" OR "email" OR "password" OR "pass" OR "user") filetype:xls OR filetype:xlsx OR filetype:csv OR filetype:pdf OR filetype:txt OR filetype:log OR filetype:sql OR filetype:env
+
+
+1. Master OSINT Dork (Organization Everywhere)
+("ORG_NAME" OR "ORG_SHORT" OR "@ORG_DOMAIN")
+(site:github.com OR site:gitlab.com OR site:bitbucket.org OR site:pastebin.com OR site:scribd.com OR site:coursehero.com OR site:slideshare.net OR site:archive.org OR site:reddit.com OR site:stackoverflow.com OR site:medium.com OR site:drive.google.com)
+
+2. Public Documents
+("ORG_NAME" OR "@ORG_DOMAIN")
+(filetype:pdf OR filetype:doc OR filetype:docx OR filetype:xls OR filetype:xlsx OR filetype:ppt OR filetype:pptx OR filetype:csv)
+
+3. Credentials & Secrets (Public Mentions)
+("ORG_NAME" OR "@ORG_DOMAIN")
+("password" OR "apikey" OR "api_key" OR "secret" OR "token" OR "client_secret" OR "bearer" OR ".env")
+(site:github.com OR site:gitlab.com OR site:pastebin.com)
+
+4. Employee Information
+("ORG_NAME" OR "@ORG_DOMAIN")
+("resume" OR "cv" OR "employee" OR "staff" OR "linkedin")
+
+5. Internal Technologies
+("ORG_NAME")
+("VPN" OR "Citrix" OR "Okta" OR "Azure" OR "AWS" OR "Jenkins" OR "Kubernetes" OR "Confluence" OR "Jira" OR "SharePoint")
+
+6. Exposed Cloud Storage
+("ORG_NAME" OR "@ORG_DOMAIN")
+(site:s3.amazonaws.com OR site:blob.core.windows.net OR site:storage.googleapis.com OR site:drive.google.com)
+7. API & Swagger Documentation
+("ORG_NAME" OR "@ORG_DOMAIN")
+("swagger" OR "openapi" OR "api documentation" OR "postman")
+
+8. Source Code References
+("ORG_NAME" OR "@ORG_DOMAIN")
+(site:github.com OR site:gitlab.com OR site:bitbucket.org)
+
+9. Email Addresses
+"@ORG_DOMAIN"
+
+10. Company Infrastructure
+("ORG_NAME")
+("vpn" OR "portal" OR "remote access" OR "citrix" OR "owa" OR "mail" OR "login")
+
